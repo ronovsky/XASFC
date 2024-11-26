@@ -31,4 +31,5 @@ def output_intensity(
 
     # axis 0 <-> depth; axis 1 <-> energy_in; axis 2 <-> theta_out
     integrand = nickel_density[:, None, None] * decay_in[:, :, None] * decay_out[:, None, :]
+    #print('Ni density:',nickel_density[:, None, None],'decin', decay_in[:, :, None],'decout', decay_out[:, None, :])
     return np.trapz(multiplier * integrand, depth_grid, axis=0)

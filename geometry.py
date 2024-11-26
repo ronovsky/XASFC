@@ -6,7 +6,7 @@ import numpy as np
 from data import NICKEL_REGIMES, load_experiment_data
 from experiment_setup import NI_FOIL
 from intensity import output_intensity
-from materials import Layer, Cell, KAPTON
+from materials import Layer, Cell, KAPTON, NAFION, GDL, CATHODE, ANODE
 
 
 def get_geometric_factor_ascan(plot=False):
@@ -98,10 +98,55 @@ def get_theoretical_angle_distribution():
     return results
 
 
+def get_cell_angle_distribution(cell=None):
+    if cell == None:
+        cell = Cell(layers=[GDL, CATHODE, NAFION, ANODE, GDL])
+    else:
+        cell = cell
+    thickness = int(cell.total_depth) # um
+    nickel_density = np.zeros(thickness * 100)  # 10 nm grid
+    counter = 0
+    for layer in cell.layers:
+        # print('çounter',counter)
+        layer_thickness_grid = int(layer.depth * 100)
+        # print('layer_thickness_grid',layer_thickness_grid)
+        if 'Ni' in layer._densities.keys():
+            nickel_density_val = layer._densities['Ni'] # mg/cm2
+            # print(nickel_density_val)
+            nickel_density[counter:counter+layer_thickness_grid] = nickel_density_val
+        else:
+            nickel_density[counter:counter+layer_thickness_grid] = 0
+        counter += layer_thickness_grid
+    # plt.plot(nickel_density)
+    # plt.show()
+
+    theta_in = np.pi / 180 * 31
+    theta_out = np.pi / 180 * np.array([41, 34, 27, 20, 13])  # Detectors C1-5
+
+    energies = np.array([8400])
+
+    results = output_intensity(theta_in, theta_out, cell, energies, 7480, nickel_density)
+    results = results[0]
+
+    results = results / results[0]
+    # print(results)
+    # plt.plot(results)
+    # plt.show()
+    return results
+
+
 @cache
 def get_geometric_factors():
 
     factors = get_geometric_factors_energy_scans()
     factors['theoretical'] = get_theoretical_angle_distribution()
-
+    factors['cell_R_model'] = get_cell_angle_distribution()
+    # print(factors)
     return factors
+
+
+if __name__ == '__main__':
+    get_geometric_factors()
+
+    # cell = Cell(layers=[GDL, CATHODE, NAFION, ANODE, GDL])
+    # get_cell_angle_distribution()

@@ -63,7 +63,7 @@ def fit_nickel_spectra(df, references, detector, ax=None):
     # Optional plotting
     if ax is not None:
 
-        ax.plot(df['energy'], target, label='data')
+        ax.plot(df['energy'], target - coefficients['background'], label='data')
 
         fit = np.zeros_like(df['energy'])
         spectra['background'] = np.ones_like(df['energy'])
@@ -76,16 +76,21 @@ def fit_nickel_spectra(df, references, detector, ax=None):
             fit += contribution
 
             color = 'rgb'[i % 4]
-            ax.plot(df['energy'], contribution, label=f'{name}: {coefficients[name]:.3g}', color=color)
-            ax.plot(df['energy'], contribution + std, linestyle='dashed', color=color)
-            ax.plot(df['energy'], contribution - std, linestyle='dashed', color=color)
+            if name != 'background':
+                ax.plot(df['energy'], contribution, label=f'{name}: {coefficients[name]:.3g}', color=color)
+                ax.plot(df['energy'], contribution + std, linestyle='dashed', color=color)
+                ax.plot(df['energy'], contribution - std, linestyle='dashed', color=color)
+            else:
+                ax.plot(df['energy'], contribution - coefficients['background'], label=f'{name}: {coefficients[name]:.3g}', color=color)
+                ax.plot(df['energy'], contribution + std - coefficients['background'], linestyle='dashed', color=color)
+                ax.plot(df['energy'], contribution - std - coefficients['background'], linestyle='dashed', color=color)
 
         suffix = ''
         if len(names) == 2:
             # Assumes Ni2+ is first
             suffix = f'; ni2+/ni ratio: {coefficients[names[0]] / coefficients[names[1]]:.3g}'
 
-        ax.plot(df['energy'], fit, label=f'fit{suffix}')
+        ax.plot(df['energy'], fit - coefficients['background'], label=f'fit{suffix}')
         ax.legend()
 
     return coefficients

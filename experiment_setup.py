@@ -103,6 +103,10 @@ def Cell_2(name, **kwargs):
     return Experiment(name='op-CCM-{i}-LS04-{s}'.format(i=name[0], s=name[1]),
                       input_suffix='_0001', **kwargs)
 
+# Modify this for the old datasets
+def Cell_old(name, **kwargs):
+    return Experiment(name='oh-PtNiIr-old-{name}'.format(name=name),
+                      input_suffix='_0001', **kwargs)
 
 CELLS_FIRST_BATCH = [
     Cell_1('F', scans=(5, 6, 7, 8, 9)), 
@@ -116,7 +120,6 @@ CELL_I = [
     Cell_1('I', scans=(18, 19, 20, 21, 22), output_name='new_y_1'),
     Cell_1('I', scans=(23, 24, 25, 26, 27), output_name='new_y_2'),
 ]
-
 
 CELL_J = [
     Cell_2(name=('J', 'a'), scans=(19, 20, 21, 22, 23)),
@@ -200,13 +203,21 @@ CELL_R = [
     Cell_2(name=('R', 'i'), scans=tuple(range(233, 245)), output_name='ocp9_1'),
     Cell_2(name=('R', 'i'), scans=tuple(range(245, 257)), output_name='ocp9_2'),
     Cell_2(name=('R', 'i'), scans=tuple(range(257, 269)), output_name='ocp9_3'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(271, 283)), output_name='ocp9_4'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(283, 295)), output_name='hold10_1'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(295, 307)), output_name='hold10_2'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(309, 321)), output_name='hold10_3'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(321, 333)), output_name='hold10_4'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(333, 345)), output_name='ocp10_1'),
-    Cell_2(name=('R', 'i'), scans=tuple(range(345, 357)), output_name='ocp10_2'),
+    Cell_2(name=('R', 'i'), scans=tuple(range(271, 283)), output_name='ocp9_4'), # 7:25-7:27
+    Cell_2(name=('R', 'i'), scans=tuple(range(283, 295)), output_name='hold10_1'), # 7:28-7:32
+    Cell_2(name=('R', 'i'), scans=tuple(range(295, 307)), output_name='hold10_2'), # 7:32-7:34
+    Cell_2(name=('R', 'i'), scans=tuple(range(309, 321)), output_name='hold10_3'), # 7:41-7:44
+    Cell_2(name=('R', 'i'), scans=tuple(range(321, 333)), output_name='hold10_4'), # 7:48-7:52
+    Cell_2(name=('R', 'i'), scans=tuple(range(333, 345)), output_name='ocp10_1'), # 7:53-7:55
+    Cell_2(name=('R', 'i'), scans=tuple(range(345, 357)), output_name='ocp10_2'), # 7:55-7:57
+]
+
+# This should be modified before use for the old data
+CELL_old_3 = [
+    Cell_old(name=('sample3'), scans=tuple(range(5, 17)), output_name='hold1'),
+    Cell_old(name=('sample3'), scans=tuple(range(19, 31)), output_name='ocp1', outlier_indices=(11, )),
+    Cell_old(name=('sample3'), scans=tuple(range(33, 45)), output_name='hold2'),
+    Cell_old(name=('sample3'), scans=tuple(range(47, 59)), output_name='ocp2', outlier_indices=(11, )),
 ]
 
 ALL_CELLS = CELLS_FIRST_BATCH + CELL_I + CELL_J + CELL_K + CELL_L
