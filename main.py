@@ -107,14 +107,14 @@ def plot_experiments(experiments, coefficients, geometric_correction=None, norma
 
 
 if __name__ == '__main__':
-    # cells_ = CELL_R[26:]
-    cells_ = CELL_R[:3] + CELL_R[9:]
+    cells_ = CELL_R[22:]
+    # cells_ = CELL_R[:3] + CELL_R[9:]
     # cells_ = CELL_R[:]
     # fit0 = fit_experiments([cells_[0]])
     # print(fit0)
     fit = fit_experiments(cells_, 0)
     print('fit',fit)
-    plot_experiments(cells_, fit)#, 'cell_R_model') # plot_experiments(experiments, coefficients, geometric_correction=None, normalized_params=None)
+    plot_experiments(cells_, fit, normalized_params=None)#, 'cell_R_model') # plot_experiments(experiments, coefficients, geometric_correction=None, normalized_params=None)
     # plot_experiments_with_norm_to_cell(cells_, fit, )
 
 
